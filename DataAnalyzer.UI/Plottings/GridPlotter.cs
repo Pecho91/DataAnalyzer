@@ -39,8 +39,6 @@ namespace DataAnalyzer.UI.Plottings
                 return;
             }
 
-
-            // Draw vertical grid lines
             for (double x = 0; x < _canvas.ActualWidth; x += gridSpacingX)
             {
                 _canvas.Children.Add(new Line
@@ -50,11 +48,10 @@ namespace DataAnalyzer.UI.Plottings
                     X2 = x,
                     Y2 = _canvas.ActualHeight,
                     Stroke = _lineBrush,
-                    StrokeThickness = 0.2
+                    StrokeThickness = 0.1
                 });
             }
 
-            // Draw horizontal grid lines
             for (double y = 0; y < _canvas.ActualHeight; y += gridSpacingY)
             {
                 _canvas.Children.Add(new Line
@@ -64,8 +61,34 @@ namespace DataAnalyzer.UI.Plottings
                     X2 = _canvas.ActualWidth,
                     Y2 = y,
                     Stroke = _lineBrush,
-                    StrokeThickness = 0.2
+                    StrokeThickness = 0.1
                 });
+            }
+        }
+
+        public void DrawGridWithTimeMarkers(TimeSpan startTime, TimeSpan interval)
+        {
+            _canvas.Children.Clear();
+
+            DrawGrid(); 
+
+            double gridSpacingX = 20 * _scaleX;           
+            double timePerPixel = interval.TotalMilliseconds / gridSpacingX;
+
+            for (double x = 0; x < _canvas.ActualWidth; x += gridSpacingX)
+            {
+                double currentMilliseconds = startTime.TotalMilliseconds + (x * timePerPixel);
+
+                TextBlock timeLabel = new TextBlock
+                {
+                    Text = $"{currentMilliseconds:0.##}ms", 
+                    Foreground = Brushes.Gray,
+                    FontSize = 10
+                };
+
+                Canvas.SetLeft(timeLabel, x);
+                Canvas.SetTop(timeLabel, 0); 
+                _canvas.Children.Add(timeLabel);
             }
         }
     }

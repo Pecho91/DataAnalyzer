@@ -23,7 +23,12 @@
         <!-- Waveform Canvas on the right -->
         <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Viewbox Stretch="Uniform" ClipToBounds="True">
-                <Canvas x:Name="WaveformCanvas" Background="White" Height="100" Width="1200"/>
+                <Grid>
+                    <!-- GridCanvas for grid -->
+                    <Canvas x:Name="GridCanvas" Height="100" Width="1200" />
+                    <!-- WaveformCanvas for waveform data -->
+                    <Canvas x:Name="WaveformCanvas" Background="Transparent" Height="100" Width="1200" />
+                </Grid>
             </Viewbox>
         </Border>
     </Grid>

@@ -119,7 +119,7 @@ namespace DataAnalyzer.UI.ViewModels
         }
         private void StartAutoUpdate()
         {
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
             timer.Tick += async (s, e) => await UpdateChannelDataAsync();
             timer.Start();
         }

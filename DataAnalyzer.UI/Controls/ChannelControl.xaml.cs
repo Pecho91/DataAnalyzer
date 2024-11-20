@@ -34,41 +34,32 @@ namespace DataAnalyzer.UI.Controls
         {
             InitializeComponent();
 
-            // DataContext should be passed in from parent ViewModel, set to an instance of ChannelViewModel.
             _zoomManager = new ZoomManager();
-            _gridPlotter = new GridPlotter(WaveformCanvas, Brushes.Blue);
+            _gridPlotter = new GridPlotter(GridCanvas, Brushes.Blue);
             _channelDataPlotter = new ChannelDataPlotter(WaveformCanvas, Brushes.Black);
 
-            // Listen for changes in the ChannelViewModel's ChannelData property
+            GridCanvas.SizeChanged += (s, e) => _gridPlotter.DrawGridWithTimeMarkers(TimeSpan.Zero, TimeSpan.FromMilliseconds(10));
+
             this.DataContextChanged += ChannelControl_DataContextChanged;
-
-            // Event handler to draw the grid when the WaveformCanvas is loaded
-            WaveformCanvas.Loaded += (s, e) => _gridPlotter.DrawGrid();
-
-            // Set up the UI for zooming with mouse wheel (if necessary)
-            //WaveformCanvas.PreviewMouseWheel += WaveformCanvas_MouseWheel;
+        
         }
 
-        // When DataContext changes (e.g. ChannelViewModel is set), update the plot
         private void ChannelControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue is ChannelViewModel channelViewModel)
             {
-                // Bind to the current channel's data and plot it
                 channelViewModel.PropertyChanged += (s, ev) =>
                 {
                     if (ev.PropertyName == nameof(ChannelViewModel.ChannelData))
                     {
-                        // When ChannelData changes, update the plot
                         _channelDataPlotter.PlotChannelData(channelViewModel.ChannelData);
                     }
                 };
 
-                // Initial plot when data is available
                 if (channelViewModel.ChannelData != null)
                 {
                     _channelDataPlotter.PlotChannelData(channelViewModel.ChannelData);
-                }
+                }             
             }
         }
 
