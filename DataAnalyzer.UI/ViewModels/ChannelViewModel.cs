@@ -16,6 +16,7 @@ using DataAnalyzer.UI.Plottings;
 using DataAnalyzer.Services.FT232ProcessorServices;
 using DataAnalyzer.Services.FT232ReaderServices;
 using System.Windows.Threading;
+using System.Windows.Controls;
 
 namespace DataAnalyzer.UI.ViewModels
 {
@@ -33,7 +34,17 @@ namespace DataAnalyzer.UI.ViewModels
             set
             {
                 _channelData = value;
-                OnPropertyChanged(nameof(ChannelData)); // Notify the UI when data changes
+                OnPropertyChanged(nameof(ChannelData));
+                OnPropertyChanged(nameof(ChannelDataAsBinary));
+            }
+        }
+
+        public string ChannelDataAsBinary
+        {
+            get
+            {
+                if (ChannelData?.BooleanLevels == null) return string.Empty;
+                return string.Concat(ChannelData.BooleanLevels.Select(b => b ? "1" : "0"));
             }
         }
 
@@ -52,7 +63,10 @@ namespace DataAnalyzer.UI.ViewModels
         //    get => _zoomLevel;
         //    set => SetProperty(ref _zoomLevel, value);
         //}
+        public ChannelViewModel()
+        {
 
+        }
         public ChannelViewModel(IChannelDataReaderService readerService, IChannelDataProcessorService processorService, int channelId, string channelName)
         {
             _readerService = readerService;
@@ -117,11 +131,34 @@ namespace DataAnalyzer.UI.ViewModels
             //    ZoomLevel = _zoomManager.GetCurrentZoomLevel(); // Assume ZoomManager exposes a method to get the current zoom level
             //}
         }
-        private void StartAutoUpdate()
+
+        private void ChannelDataInTextBox(ChannelDataModel channelData, TextBox textbox)
         {
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
-            timer.Tick += async (s, e) => await UpdateChannelDataAsync();
-            timer.Start();
+            if (channelData?.BooleanLevels == null || textbox == null)
+            {
+                return;
+            }
+
+            string binaryString = string.Concat(ChannelData.BooleanLevels.Select(b  => b ? 1 : 0));
+
+            textbox.Text = binaryString;
+
+        }
+
+        private async Task StartAutoUpdate()
+        {
+
+            await UpdateChannelDataAsync();
+
+            //var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+
+            //timer.Tick += async (s, e) =>
+            //{
+            //    await UpdateChannelDataAsync();
+            //    timer.Stop();
+            //};
+
+            //timer.Start();
         }
     }
 }

@@ -1,4 +1,7 @@
 ﻿using DataAnalyzer.Common.Models;
+using DataAnalyzer.Services.FT232ProcessorServices;
+using DataAnalyzer.Services.FT232ReaderServices;
+using DataAnalyzer.UI.Components.TextBoxes;
 using DataAnalyzer.UI.Plottings;
 using DataAnalyzer.UI.Transformations;
 using DataAnalyzer.UI.ViewModels;
@@ -29,6 +32,7 @@ namespace DataAnalyzer.UI.Controls
         private readonly ZoomManager _zoomManager;
         private readonly GridPlotter _gridPlotter;
         private readonly ChannelDataPlotter _channelDataPlotter;
+        private readonly ChannelDataInTextBox _channelInTextBox;
 
         public ChannelControl()
         {
@@ -41,7 +45,7 @@ namespace DataAnalyzer.UI.Controls
             GridCanvas.SizeChanged += (s, e) => _gridPlotter.DrawGridWithTimeMarkers(TimeSpan.Zero, TimeSpan.FromMilliseconds(10));
 
             this.DataContextChanged += ChannelControl_DataContextChanged;
-        
+      
         }
 
         private void ChannelControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

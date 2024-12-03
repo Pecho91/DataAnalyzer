@@ -14,8 +14,8 @@ namespace DataAnalyzer.UI.Plottings
     {
         private readonly Canvas _canvas;
         private readonly Brush _lineBrush;
-        private double _scaleX = 20;
-        private double _scaleY = 20;
+        private double _scaleX = 44;
+        private double _scaleY = 44;
 
         public ChannelDataPlotter(Canvas canvas, Brush lineBrush)
         {

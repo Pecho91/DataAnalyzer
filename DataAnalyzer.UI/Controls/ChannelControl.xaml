@@ -27,12 +27,14 @@
                                                 BorderBrush="Black" BorderThickness="1"
                                                 Height="100" Width="100"/>
         
-        <TextBlock x:Name="WaveformText" Grid.Row="1" Grid.Column="1" 
-                                         VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Width="790" Background="AliceBlue"/>
+        <TextBox x:Name="WaveformTextBox" Text="{Binding ChannelDataAsBinary, Mode=OneWay}"
+                                          Grid.Row="1" Grid.Column="1" 
+                                          VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Width="1200" 
+                                          Background="AliceBlue"/>
 
         <!-- Waveform Canvas on the right -->
         <Border Grid.Row ="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Viewbox Stretch="Uniform" ClipToBounds="True">
+            <Viewbox Stretch="None" ClipToBounds="True">
                 <Grid>
                     <!-- GridCanvas for grid -->
                     <Canvas x:Name="GridCanvas" Height="160" Width="1200" />

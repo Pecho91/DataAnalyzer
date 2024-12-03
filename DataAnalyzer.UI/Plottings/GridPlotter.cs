@@ -85,7 +85,7 @@ namespace DataAnalyzer.UI.Plottings
 
                 TextBlock timeLabel = new TextBlock
                 {
-                    Text = $"{currentMilliseconds:0.##}ms", 
+                    Text = $"{currentMilliseconds:0.##}", 
                     Foreground = Brushes.Gray,
                     FontSize = 10
                 };
