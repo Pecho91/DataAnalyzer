@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:DataAnalyzer.UI.Controls"
              xmlns:viewModels="clr-namespace:DataAnalyzer.UI.ViewModels"
              mc:Ignorable="d"          
-             d:DesignHeight="100" d:DesignWidth="900">
+             d:DesignHeight="900" d:DesignWidth="1200">
 
     
     
@@ -21,7 +21,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Button on the left -->
+        
         <Button Content="{Binding ChannelName}" Grid.Row="0" Grid.Column="0" 
                                                 VerticalAlignment="Center" HorizontalAlignment="Center" 
                                                 BorderBrush="Black" BorderThickness="1"
@@ -32,16 +32,18 @@
                                           VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Width="1200" 
                                           Background="AliceBlue"/>
 
-        <!-- Waveform Canvas on the right -->
-        <Border Grid.Row ="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Viewbox Stretch="None" ClipToBounds="True">
-                <Grid>
-                    <!-- GridCanvas for grid -->
-                    <Canvas x:Name="GridCanvas" Height="160" Width="1200" />
-                    <!-- WaveformCanvas for waveform data -->
-                    <Canvas x:Name="WaveformCanvas" Background="Transparent" Height="160" Width="1200" />
-                </Grid>
-            </Viewbox>
+        
+        <Border 
+                Grid.Row ="0" Grid.Column="1" 
+                BorderBrush="Black" BorderThickness="1" 
+                VerticalAlignment="Center" HorizontalAlignment="Left">
+
+            <Grid>
+                <Canvas x:Name="GridCanvas" Height="160" Width="1200"  HorizontalAlignment="Stretch" />
+
+                <Canvas x:Name="WaveformCanvas" Background="Transparent" Height="160" Width="1200"/>
+            </Grid>
+            
         </Border>
     </Grid>
 
