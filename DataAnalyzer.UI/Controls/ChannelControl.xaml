@@ -11,23 +11,33 @@
     
     
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="160"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>  
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="110"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Button on the left -->
-        <Button Content="{Binding ChannelName}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="Black" BorderThickness="1"
-                Height="100" Width="100"/>
+        <Button Content="{Binding ChannelName}" Grid.Row="0" Grid.Column="0" 
+                                                VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                                BorderBrush="Black" BorderThickness="1"
+                                                Height="100" Width="100"/>
+        
+        <TextBlock x:Name="WaveformText" Grid.Row="1" Grid.Column="1" 
+                                         VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Width="790" Background="AliceBlue"/>
 
         <!-- Waveform Canvas on the right -->
-        <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border Grid.Row ="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Viewbox Stretch="Uniform" ClipToBounds="True">
                 <Grid>
                     <!-- GridCanvas for grid -->
-                    <Canvas x:Name="GridCanvas" Height="100" Width="1200" />
+                    <Canvas x:Name="GridCanvas" Height="160" Width="1200" />
                     <!-- WaveformCanvas for waveform data -->
-                    <Canvas x:Name="WaveformCanvas" Background="Transparent" Height="100" Width="1200" />
+                    <Canvas x:Name="WaveformCanvas" Background="Transparent" Height="160" Width="1200" />
                 </Grid>
             </Viewbox>
         </Border>

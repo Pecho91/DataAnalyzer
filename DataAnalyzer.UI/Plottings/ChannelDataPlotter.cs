@@ -14,8 +14,8 @@ namespace DataAnalyzer.UI.Plottings
     {
         private readonly Canvas _canvas;
         private readonly Brush _lineBrush;
-        private double _scaleX = 4;
-        private double _scaleY = 4;
+        private double _scaleX = 20;
+        private double _scaleY = 20;
 
         public ChannelDataPlotter(Canvas canvas, Brush lineBrush)
         {
@@ -33,24 +33,31 @@ namespace DataAnalyzer.UI.Plottings
         {
 
             if (channelData?.BooleanLevels == null || channelData.BooleanLevels.Length == 0)
-                return; 
+            {
+                return;
+            }
 
             _canvas.Children.Clear();
 
+            
             double width = _canvas.ActualWidth * _scaleX;
             double segmentWidth = width / channelData.BooleanLevels.Length;
-            double centerY = _canvas.ActualHeight;
 
+            double topMargin = 20;
+            double bottomMargin = 20;
+            double usableHeight = _canvas.ActualHeight - topMargin - bottomMargin;
+
+            double centerY = topMargin + usableHeight / 2;
 
             bool previousState = channelData.BooleanLevels[0];
             double previousX = 0;
-            double previousY = previousState ? centerY - 20 * _scaleY : centerY + 20 * _scaleY;
+            double previousY = previousState ? centerY - usableHeight / 2 : centerY + usableHeight / 2;
 
             for (int i = 1; i < channelData.BooleanLevels.Length; i++)
             {
                 bool currentState = channelData.BooleanLevels[i];
                 double currentX = i * segmentWidth;
-                double currentY = currentState ? centerY - 20 * _scaleY : centerY + 20 * _scaleY;
+                double currentY = currentState ? centerY - usableHeight / 2 : centerY + usableHeight / 2;
 
                 _canvas.Children.Add(new Line
                 {

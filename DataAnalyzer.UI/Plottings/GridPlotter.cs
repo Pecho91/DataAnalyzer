@@ -39,14 +39,18 @@ namespace DataAnalyzer.UI.Plottings
                 return;
             }
 
+            double topMargin = 20;
+            double bottomMargin = 20;
+            double usableHeight = _canvas.ActualHeight - topMargin - bottomMargin;
+
             for (double x = 0; x < _canvas.ActualWidth; x += gridSpacingX)
             {
                 _canvas.Children.Add(new Line
                 {
                     X1 = x,
-                    Y1 = 0,
+                    Y1 = topMargin,
                     X2 = x,
-                    Y2 = _canvas.ActualHeight,
+                    Y2 = _canvas.ActualHeight - bottomMargin,
                     Stroke = _lineBrush,
                     StrokeThickness = 0.1
                 });
@@ -87,7 +91,7 @@ namespace DataAnalyzer.UI.Plottings
                 };
 
                 Canvas.SetLeft(timeLabel, x);
-                Canvas.SetTop(timeLabel, 0); 
+                Canvas.SetBottom(timeLabel, 0); 
                 _canvas.Children.Add(timeLabel);
             }
         }
