@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace DataAnalyzer.Services.FT232ReaderServices
 {
-    public interface IChannelDataReaderService
+    public interface ISimulatedDataReaderService
     {
-        Task<byte[]> ReadDataAsync(uint bufferSize);
-       
+        Task<byte[]> ReadSimulatedDataAsync(uint bufferSize);
     }
 }

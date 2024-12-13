@@ -17,6 +17,8 @@ using DataAnalyzer.Services.FT232ProcessorServices;
 using DataAnalyzer.Services.FT232ReaderServices;
 using System.Windows.Threading;
 using System.Windows.Controls;
+using System.Diagnostics;
+using System.Runtime.Versioning;
 
 namespace DataAnalyzer.UI.ViewModels
 {
@@ -26,6 +28,7 @@ namespace DataAnalyzer.UI.ViewModels
 
         private readonly IChannelDataReaderService _readerService;
         private readonly IChannelDataProcessorService _processorService;
+        private readonly ISimulatedDataReaderService _simulatedReaderService;
 
         private ChannelDataModel _channelData;
         public ChannelDataModel ChannelData
@@ -35,7 +38,7 @@ namespace DataAnalyzer.UI.ViewModels
             {
                 _channelData = value;
                 OnPropertyChanged(nameof(ChannelData));
-                OnPropertyChanged(nameof(ChannelDataAsBinary));
+                OnPropertyChanged(nameof(ChannelDataAsBinary));               
             }
         }
 
@@ -48,8 +51,8 @@ namespace DataAnalyzer.UI.ViewModels
             }
         }
 
-        public int ChannelId { get; }
-        public string ChannelName { get; }
+        public int ChannelId { get; set; }
+        public string ChannelName { get; set; }
 
         public ICommand UpdateDataCommand { get; }
 
@@ -63,102 +66,83 @@ namespace DataAnalyzer.UI.ViewModels
         //    get => _zoomLevel;
         //    set => SetProperty(ref _zoomLevel, value);
         //}
-        public ChannelViewModel()
-        {
 
-        }
-        public ChannelViewModel(IChannelDataReaderService readerService, IChannelDataProcessorService processorService, int channelId, string channelName)
+        [SupportedOSPlatform("windows")]
+        public ChannelViewModel(IChannelDataReaderService readerService, ISimulatedDataReaderService simulatedReaderService,
+                                IChannelDataProcessorService processorService, int channelId, string channelName)
         {
             _readerService = readerService;
             _processorService = processorService;
+            _simulatedReaderService = simulatedReaderService;
 
             _channelData = new ChannelDataModel
             {
                 ChannelId = channelId,
                 ChannelName = channelName,
-                BooleanLevels = new bool[0],
+                BooleanLevels = Array.Empty<bool>(),
                 Timestamp = DateTime.Now,
             };
 
-            UpdateDataCommand = new RelayCommand(async () => await UpdateChannelDataAsync());
+            //UpdateDataCommand = new RelayCommand(async () => await UpdateChannelDataAsync());
+            UpdateDataCommand = new RelayCommand(async () => await UpdateSimulatedChannelDataAsync());
 
             StartAutoUpdate();
+          
+        }
 
-            //_channelData = new ObservableCollection<ChannelDataModel>();
-            //_zoomManager = new ZoomManager();  
+        private async Task UpdateSimulatedChannelDataAsync()
+        {
+            try
+            {
+                Debug.WriteLine("Reading simulated data...");
 
-            //ZoomInCommand = new RelayCommand(ZoomIn);
-            //ZoomOutCommand = new RelayCommand(ZoomOut);
-            //UpdateChannelData(_channelData);
+                var rawData = await _simulatedReaderService.ReadSimulatedDataAsync(1024);
+                Debug.WriteLine($"Raw data length: {rawData.Length}");
+
+                var processedData = await _processorService.ProcessedDataAsync(rawData, _channelData.ChannelId, _channelData.ChannelName);
+
+                Debug.WriteLine($"Processed data: {processedData.BooleanLevels.Length} items");
+
+                ChannelData = processedData;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating channel data: {ex.Message}");
+            }
         }
 
         private async Task UpdateChannelDataAsync()
         {
             try
             {
-                // Fetch raw data from the FT232 reader service
-                var rawData = await _readerService.ReadGeneratedMockDataAsync(1024); // Example buffer size, adjust as needed
 
-                // Process the raw data into boolean levels for this channel
+                var rawData = await _readerService.ReadDataAsync(1024); // Example buffer size, adjust as needed
+
                 var processedData = await _processorService.ProcessedDataAsync(rawData, _channelData.ChannelId, _channelData.ChannelName);
 
-                // Update the ChannelData model with the processed data
                 ChannelData = processedData;
             }
             catch (Exception ex)
             {
                 // Handle exceptions (like connection issues or invalid data)
-                Console.WriteLine($"Error updating channel data: {ex.Message}");
+                Debug.WriteLine($"Error updating channel data: {ex.Message}");
             }
-
-           
-
-            //public void ZoomIn()
-            //{
-            //    _zoomManager.ZoomIn();
-            //    UpdateZoomLevel();
-            //}
-
-            //public void ZoomOut()
-            //{
-            //    _zoomManager.ZoomOut();
-            //    UpdateZoomLevel();
-            //}
-
-            //public void UpdateZoomLevel()
-            //{
-            //    // Here, you can manage how the zoom affects the ZoomLevel property
-            //    ZoomLevel = _zoomManager.GetCurrentZoomLevel(); // Assume ZoomManager exposes a method to get the current zoom level
-            //}
-        }
-
-        private void ChannelDataInTextBox(ChannelDataModel channelData, TextBox textbox)
-        {
-            if (channelData?.BooleanLevels == null || textbox == null)
-            {
-                return;
-            }
-
-            string binaryString = string.Concat(ChannelData.BooleanLevels.Select(b  => b ? 1 : 0));
-
-            textbox.Text = binaryString;
-
         }
 
         private async Task StartAutoUpdate()
         {
 
-            await UpdateChannelDataAsync();
+            //await UpdateChannelDataAsync();
 
-            //var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1000) };
 
-            //timer.Tick += async (s, e) =>
-            //{
-            //    await UpdateChannelDataAsync();
-            //    timer.Stop();
-            //};
+            timer.Tick += async (s, e) =>
+            {
+                await UpdateSimulatedChannelDataAsync();
+                timer.Stop();
+            };
 
-            //timer.Start();
+            timer.Start();
         }
     }
 }

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAnalyzer.Data.FT232Data
+namespace FPGADataSimulator
 {
-    public interface IFT232DataReader
+    public enum FPGAState
     {
-         Task<byte[]> ReadDataAsync(uint bufferSize);
+        Idle,
+        Active,
+        Error
     }
 }

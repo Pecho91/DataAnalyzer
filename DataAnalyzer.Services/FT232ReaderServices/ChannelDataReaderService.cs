@@ -19,12 +19,9 @@ namespace DataAnalyzer.Services.FT232ReaderServices
 
         public Task<byte[]> ReadDataAsync(uint bufferSize)
         {
-            return Task.Run(() => _ft232DataReader.ReadDataFromFT232(bufferSize));
-        }
+            return Task.Run(() => _ft232DataReader.ReadDataAsync(bufferSize));
+        }      
 
-        public Task<byte[]> ReadGeneratedMockDataAsync(uint bufferSize)
-        {
-            return Task.Run(() => _ft232DataReader.GenerateMockDataFromFT232(bufferSize));
-        }
+       
     }
 }

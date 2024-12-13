@@ -32,7 +32,6 @@ namespace DataAnalyzer.UI.Controls
         private readonly ZoomManager _zoomManager;
         private readonly GridPlotter _gridPlotter;
         private readonly ChannelDataPlotter _channelDataPlotter;
-        private readonly ChannelDataInTextBox _channelInTextBox;
 
         public ChannelControl()
         {
@@ -67,7 +66,6 @@ namespace DataAnalyzer.UI.Controls
             }
         }
 
-        // Zoom event handler when mouse wheel is used
         //private void WaveformCanvas_MouseWheel(object sender, MouseWheelEventArgs e)
         //{
         //    var viewModel = (ChannelViewModel)DataContext;
@@ -86,7 +84,6 @@ namespace DataAnalyzer.UI.Controls
         //    ApplyZoom();
         //}
 
-        //// Apply zoom effect by modifying the LayoutTransform of the WaveformCanvas
         //private void ApplyZoom()
         //{
         //    var canvas = WaveformCanvas;

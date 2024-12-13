@@ -22,8 +22,9 @@
         </Grid.ColumnDefinitions>
 
         
-        <Button Content="{Binding ChannelName}" Grid.Row="0" Grid.Column="0" 
+        <Button Content="{Binding ChannelName, Mode=OneWay}" Grid.Row="0" Grid.Column="0" 
                                                 VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                                VerticalContentAlignment="Bottom"
                                                 BorderBrush="Black" BorderThickness="1"
                                                 Height="100" Width="100"/>
         

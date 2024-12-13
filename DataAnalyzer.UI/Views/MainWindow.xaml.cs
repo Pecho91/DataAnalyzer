@@ -26,12 +26,13 @@ namespace DataAnalyzer.UI.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(IChannelDataReaderService readerService, IChannelDataProcessorService processorService)
+        public MainWindow(IChannelDataReaderService readerService,
+                          ISimulatedDataReaderService simulatedDataReader,
+                          IChannelDataProcessorService processorService)
         {
             InitializeComponent();
 
-            // Pass these services to the ViewModel
-            DataContext = new MainViewModel(readerService, processorService);
+            DataContext = new MainViewModel(readerService, processorService, simulatedDataReader);
         }
     }
 }    
