@@ -19,6 +19,10 @@ namespace DataAnalyzer.UI
     public partial class App : Application
     {
         private IServiceProvider _serviceProvider;
+        private IChannelDataReaderService readerService;
+        private ISimulatedDataReaderService simulatedDataReader;
+        private IChannelDataProcessorService processorService;
+
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -34,20 +38,21 @@ namespace DataAnalyzer.UI
                 bool useSimulation = bool.Parse(ConfigurationManager.AppSettings["UseSimulation"] ?? "false");
                 Debug.WriteLine($"Configuration: UseSimulation = {useSimulation}");
 
-                if (useSimulation)
-                {
-                    string filePath = FPGADataSimulator.SimulationFilePathProvider.GetSimulatedFilePath();
-                    Debug.WriteLine($"Generated file path: {filePath}");
+                //if (useSimulation)
+                //{
+                //    string filePath = FPGADataSimulator.SimulationFilePathProvider.GetSimulatedFilePath();
+                //    Debug.WriteLine($"Generated file path: {filePath}");
 
-                    Debug.WriteLine("Simulation mode enabled. Checking for file...");
-                    const int maxWaitTime = 10000;
-                    const int pollInterval = 500;
+                //    Debug.WriteLine("Simulation mode enabled. Checking for file...");
+                //    const int maxWaitTime = 10000;
+                //    const int pollInterval = 500;
 
-                    await WaitForFileAsync(filePath, maxWaitTime, pollInterval);
-                }
+                //    await WaitForFileAsync(filePath, maxWaitTime, pollInterval);
+                //}
 
                 // Resolve services and start the main window
-                var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                //var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                var mainWindow = new MainWindow(readerService, simulatedDataReader, processorService);
                 Debug.WriteLine("MainWindow is being shown");
                 mainWindow.Show();
             }
@@ -64,11 +69,11 @@ namespace DataAnalyzer.UI
         {
             // Add data layer services
             services.AddScoped<ISimulatedFT232DataReader, SimulatedFT232DataReader>();
-            services.AddScoped<IFT232DataReader, FT232DataReader>();
+            //services.AddScoped<IFT232DataReader, FT232DataReader>();
 
             // Add services layer
             services.AddScoped<ISimulatedDataReaderService, SimulatedDataReaderService>();
-            services.AddScoped<IChannelDataProcessorService, ChannelDataProcessorService>();
+           // services.AddScoped<IChannelDataProcessorService, ChannelDataProcessorService>();
             services.AddScoped<IChannelDataReaderService, ChannelDataReaderService>();
 
             bool useSimulation = bool.Parse(ConfigurationManager.AppSettings["UseSimulation"] ?? "false");
@@ -77,14 +82,14 @@ namespace DataAnalyzer.UI
             {
                 services.AddSingleton<ISimulatedFT232DataReader, SimulatedFT232DataReader>();
             }
-            else
-            {
-                services.AddSingleton<IFT232DataReader>(provider =>
-                {
-                    IntPtr pointer = GetFT232Handle(); 
-                    return new FT232DataReader(pointer);
-                });
-            }
+            //else
+            //{
+            //    services.AddSingleton<IFT232DataReader>(provider =>
+            //    {
+            //        IntPtr pointer = GetFT232Handle(); 
+            //        return new FT232DataReader(pointer);
+            //    });
+            //}
 
             // Add MainWindow
             services.AddTransient<MainWindow>();

@@ -25,7 +25,11 @@ namespace FT232SimulatorConsoleApp
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
+                    //random data
                     byte[] data = FT232Simulator.GenerateRandomData(_bufferSize);
+
+                    //not random data
+                    //byte[] data = new byte[] { 0b10101010, 0b11001100 }; 
                     DataGenerated?.Invoke(this, data);
 
                     Console.WriteLine($"Generated {data.Length} bytes of random data.");

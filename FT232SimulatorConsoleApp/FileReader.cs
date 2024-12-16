@@ -15,12 +15,10 @@ namespace FT232SimulatorConsoleApp
             _filePath = filePath;
         }
 
-        // Method to read the data from the file asynchronously
         public async Task<byte[]> ReadDataAsync()
         {
             try
             {
-                // Read all bytes from the file asynchronously
                 byte[] data = await File.ReadAllBytesAsync(_filePath);
                 return data;
             }

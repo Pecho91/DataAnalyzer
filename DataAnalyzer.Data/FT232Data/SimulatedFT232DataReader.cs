@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FPGADataSimulator;
+
 
 namespace DataAnalyzer.Data.FT232Data
 {
@@ -14,7 +14,7 @@ namespace DataAnalyzer.Data.FT232Data
 
         public SimulatedFT232DataReader()
         {
-            _filePath = SimulationFilePathProvider.GetSimulatedFilePath();
+            
         }
 
         public async Task<byte[]> ReadSimulatedDataAsync(uint bufferSize)
